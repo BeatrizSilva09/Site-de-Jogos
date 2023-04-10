@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da cobrinha</title>
+</head>
+<body>
+
+    <canvas id= "stage" width="600" height="600"></canvas>
+    <script type="text/javascript">
+    
+    alert('Bem vindo ao jogo da cobrinha');
+
+    window.onload = function(){
+
+        var stage = document.getElementById('stage');
+        var ctx = stage.getContext("2d");
+        document.addEventListener("keydown", keyPush ); // toda vez que uma tecla for pressionada, a funcao keyPush é chamada.
+
+        setInterval(game, 100); // a cada 1000 milisegundo / por 15, ele vai chamar a funcao game.
+        
+         const vel = 1;
+         var vx = vy = 0;
+         var px = 10
+         var py = 15;
+         var tam = 30;
+         var quant = 20;
+         var ax = ay = 15;
+
+         var rastro = []; //criando o rastro da cobra
+         calda = 5;
+
+        function game(){ // atualizando posicao da cabeça da cobra
+              px += vx;
+              py += vy;
+              if(px <  0){
+                  px  = quant - 1;
+              }
+              if(px > quant - 1){
+                  px = 0;
+              }
+              if(py < 0){
+                  py = quant - 1;
+              }
+              if(py > quant - 1){
+                  py = 0; 
+              }
+        
+
+        ctx.fillStyle = "blue"; //pinta o meu stage
+        ctx.fillRect(0,0,stage.width, stage.height);
+
+        ctx.fillStyle = "red"; // pintando a maça
+        ctx.fillRect(ax*tam, ay*tam, tam, tam);
+
+        ctx.fillStyle = "green"; //pintando a cobra
+        for (var i = 0; i < rastro.length; i++){
+            ctx.fillRect(rastro[i].x*tam, rastro[i].y*tam, tam, tam);
+            if(rastro[i].x == px && rastro[i].y == py){
+
+                vx = vy = 0;
+                calda = 5;
+            }
+        }
+
+        rastro.push({x:px, y:py})
+        while (rastro.length > calda){
+            rastro.shift();
+        }
+        if(ax == px && ay == py){
+            calda++;
+            ax = Math.floor(Math.random()*quant);  //reposicionando a maça
+            ay = Math.floor(Math.random()*quant);
+        }
+    }
+
+
+    function keyPush(event){ //controlando a cobra
+           
+        switch(event.keyCode){
+            case 37: // esquerda
+               vx = -vel;
+               vy = 0;
+               break;
+            
+            case 38: // up
+               vx = 0;
+               vy = -vel;
+               break;
+
+            case 39: // direita
+               vx = vel;
+               vy = 0;
+               break;
+
+            case 40: // abaixa
+               vx = 0;
+               vy = vel;
+               break;
+            default:
+
+                   break;
+        } 
+  
+    }
+}
+    </script>
+    
+    
+</body>
+</html>
